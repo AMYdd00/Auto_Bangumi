@@ -1,0 +1,18 @@
+﻿services:
+  autobangumi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: Amy-AutoBangumi
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+    ports:
+      - "37892:37892"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+      - PGID=1000
+      - PUID=1000
+      - UMASK=022
+      - AB_WEBUI_PORT=37892

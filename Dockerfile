@@ -4,11 +4,8 @@ WORKDIR /app
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 
-# Install dependencies (cached layer)
 COPY backend/pyproject.toml backend/uv.lock ./
 RUN uv sync --frozen --no-dev
-
-# Copy application source
 COPY backend/src ./src
 
 
@@ -29,16 +26,11 @@ ENV LANG="C.UTF-8" \
 
 WORKDIR /app
 
-# Copy venv and source from builder
 COPY --from=builder /app/.venv /app/.venv
 COPY --from=builder /app/src .
-
-# Copy pre-built frontend from host
 COPY webui/dist ./dist
-
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
-# Add user
 RUN mkdir -p /home/ab && \
     addgroup -S ab -g 911 && \
     adduser -S ab -G ab -h /home/ab -s /sbin/nologin -u 911
