@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
     <img src="docs/public/image/icons/light-icon.svg#gh-light-mode-only" width=50%/ alt="">
     <img src="docs/public/image/icons/dark-icon.svg#gh-dark-mode-only" width=50%/ alt="">
 </p>
@@ -37,6 +37,7 @@
 | 🔐 Passkey 登录 | 支持 WebAuthn 指纹/面容无密码登录 |
 | 🧩 搜索源插件 | 支持 Mikan / DMHY / Nyaa 多种搜索源 |
 | 📱 响应式 UI | PC / 移动端自适应，深色/浅色主题 |
+| 🔔 多通道通知 | 支持 Telegram / Discord / OneBot v11(QQ) / Bark / ServerChan / 企业微信 / Gotify / Pushover / Webhook |
 | 🌐 国际化 | 中文 / English 双语界面 |
 
 ### 🔧 本分支修复内容
@@ -204,6 +205,86 @@ Bangumi
 → Kakkou no Iinazuke S01E07.mp4
 ```
 
+
+## 🔔 通知设置
+
+AutoBangumi 支持多种通知渠道，番剧更新时自动推送。你可以在 WebUI **设置 → 通知设置** 中配置。
+
+### 开启通知
+
+1. 进入 **设置 → 通知设置**
+2. 打开 **启用** 开关
+3. 点击 **添加通知服务**，选择需要的推送渠道
+
+### 支持的推送渠道
+
+| 渠道 | 类型值 | 说明 |
+|------|--------|------|
+| Telegram | 	elegram | Telegram Bot 推送，需 Bot Token 和 Chat ID |
+| Discord | discord | Discord Webhook，需 Webhook URL |
+| **OneBot v11 (QQ)** | onebot | 通过 OneBot 协议的 QQ 机器人推送 |
+| Bark | ark | iOS 推送，需 Device Key |
+| Server Chan | server-chan | 微信推送，需 SendKey |
+| 企业微信 | wecom | 企业微信机器人，需 Webhook URL |
+| Gotify | gotify | 自托管推送服务 |
+| Pushover | pushover | 跨平台推送 |
+| Webhook | webhook | 通用 Webhook，支持自定义 JSON 模板 |
+
+---
+
+### OneBot v11 (QQ) 详细配置
+
+适用于 **LLOneBot**、**go-cqhttp**、**Lagrange.OneBot** 等 OneBot v11 兼容的 QQ 机器人。
+
+#### 前置准备
+
+你需要先部署一个 OneBot v11 兼容的 QQ 机器人，并确保其 HTTP API 服务正常运行。
+
+以 **LLOneBot** 为例：
+
+1. 在 LLOneBot 设置中启用 **HTTP 服务端**
+2. 设置监听地址和端口（默认  .0.0.0:5700）
+3. （可选）设置 ccess_token 用于鉴权
+4. 确保 QQ 号已登录且在线
+
+#### AutoBangumi 配置
+
+进入 **设置 → 通知设置**，添加通知服务，选择 **OneBot v11**，填写以下字段：
+
+| 字段 | 必填 | 说明 | 示例 |
+|------|------|------|------|
+| **API URL** | ✅ | OneBot HTTP API 地址 | http://192.168.1.100:5700 |
+| **Access Token** | ❌ | 与 LLOneBot 设置的 ccess_token 一致 | 留空 |
+| **Target ID** | ✅ | **私聊**：填 QQ 号；**群聊**：填群号 | 123456789 |
+| **Message Type** | ✅ | private = 私聊，group = 群聊 | private 或 group |
+
+> **💡 Message Type 选择：**
+> - 想给自己发通知 → 选 private，Target ID 填你的 **QQ 号**
+> - 想发到群里 → 选 group，Target ID 填 **群号**
+
+#### 番剧更新通知效果
+
+当有新番更新时，QQ 会收到类似以下的消息：
+
+`	ext
+番剧名称：葬送的芙莉莲
+季度：第1季
+更新集数：第12集
+`
+
+如果有番剧封面图，会附带在文字上方一起发送。
+
+#### 测试通知
+
+配置完成后，点击通知列表右侧的 ▶ **测试** 按钮，机器人会发送一条消息到目标：
+
+`	ext
+AutoBangumi 通知测试成功！
+Notification test successful!
+`
+
+---
+
 ---
 
 ## ⚙️ 支持的下载器
@@ -236,3 +317,4 @@ Bangumi
   <a href="https://github.com/AMYdd00/Auto_Bangumi/issues">提交 Issue</a> ·
   <a href="https://github.com/AMYdd00/Auto_Bangumi/pulls">提交 PR</a>
 </p>
+
