@@ -1,4 +1,4 @@
-<p align="center">
+﻿<p align="center">
     <img src="docs/public/image/icons/light-icon.svg#gh-light-mode-only" width=50%/ alt="">
     <img src="docs/public/image/icons/dark-icon.svg#gh-dark-mode-only" width=50%/ alt="">
 </p>
@@ -205,6 +205,15 @@ Bangumi
 → Kakkou no Iinazuke S01E07.mp4
 ```
 
+---
+
+## ⚙️ 支持的下载器
+
+- **qBittorrent**（WebUI）
+
+---
+
+
 
 ## 🔔 通知设置
 
@@ -220,15 +229,15 @@ AutoBangumi 支持多种通知渠道，番剧更新时自动推送。你可以�
 
 | 渠道 | 类型值 | 说明 |
 |------|--------|------|
-| Telegram | 	elegram | Telegram Bot 推送，需 Bot Token 和 Chat ID |
-| Discord | discord | Discord Webhook，需 Webhook URL |
-| **OneBot v11 (QQ)** | onebot | 通过 OneBot 协议的 QQ 机器人推送 |
-| Bark | ark | iOS 推送，需 Device Key |
-| Server Chan | server-chan | 微信推送，需 SendKey |
-| 企业微信 | wecom | 企业微信机器人，需 Webhook URL |
-| Gotify | gotify | 自托管推送服务 |
-| Pushover | pushover | 跨平台推送 |
-| Webhook | webhook | 通用 Webhook，支持自定义 JSON 模板 |
+| Telegram | `telegram` | Telegram Bot 推送，需 Bot Token 和 Chat ID |
+| Discord | `discord` | Discord Webhook，需 Webhook URL |
+| **OneBot v11 (QQ)** | `onebot` | 通过 OneBot 协议的 QQ 机器人推送 |
+| Bark | `bark` | iOS 推送，需 Device Key |
+| Server Chan | `server-chan` | 微信推送，需 SendKey |
+| 企业微信 | `wecom` | 企业微信机器人，需 Webhook URL |
+| Gotify | `gotify` | 自托管推送服务 |
+| Pushover | `pushover` | 跨平台推送 |
+| Webhook | `webhook` | 通用 Webhook，支持自定义 JSON 模板 |
 
 ---
 
@@ -243,8 +252,8 @@ AutoBangumi 支持多种通知渠道，番剧更新时自动推送。你可以�
 以 **LLOneBot** 为例：
 
 1. 在 LLOneBot 设置中启用 **HTTP 服务端**
-2. 设置监听地址和端口（默认  .0.0.0:5700）
-3. （可选）设置 ccess_token 用于鉴权
+2. 设置监听地址和端口（默认 `0.0.0.0:5700`）
+3. （可选）设置 `access_token` 用于鉴权
 4. 确保 QQ 号已登录且在线
 
 #### AutoBangumi 配置
@@ -253,24 +262,24 @@ AutoBangumi 支持多种通知渠道，番剧更新时自动推送。你可以�
 
 | 字段 | 必填 | 说明 | 示例 |
 |------|------|------|------|
-| **API URL** | ✅ | OneBot HTTP API 地址 | http://192.168.1.100:5700 |
-| **Access Token** | ❌ | 与 LLOneBot 设置的 ccess_token 一致 | 留空 |
-| **Target ID** | ✅ | **私聊**：填 QQ 号；**群聊**：填群号 | 123456789 |
-| **Message Type** | ✅ | private = 私聊，group = 群聊 | private 或 group |
+| **API URL** | ✅ | OneBot HTTP API 地址 | `http://192.168.1.100:5700` |
+| **Access Token** | ❌ | 与 LLOneBot 设置的 `access_token` 一致 | 留空 |
+| **Target ID** | ✅ | **私聊**：填 QQ 号；**群聊**：填群号 | `123456789` |
+| **Message Type** | ✅ | `private` = 私聊，`group` = 群聊 | `private` 或 `group` |
 
 > **💡 Message Type 选择：**
-> - 想给自己发通知 → 选 private，Target ID 填你的 **QQ 号**
-> - 想发到群里 → 选 group，Target ID 填 **群号**
+> - 想给自己发通知 → 选 `private`，Target ID 填你的 **QQ 号**
+> - 想发到群里 → 选 `group`，Target ID 填 **群号**
 
 #### 番剧更新通知效果
 
 当有新番更新时，QQ 会收到类似以下的消息：
 
-`	ext
+```text
 番剧名称：葬送的芙莉莲
 季度：第1季
 更新集数：第12集
-`
+```
 
 如果有番剧封面图，会附带在文字上方一起发送。
 
@@ -278,21 +287,32 @@ AutoBangumi 支持多种通知渠道，番剧更新时自动推送。你可以�
 
 配置完成后，点击通知列表右侧的 ▶ **测试** 按钮，机器人会发送一条消息到目标：
 
-`	ext
+```text
 AutoBangumi 通知测试成功！
 Notification test successful!
-`
+```
 
 ---
 
+### Telegram 配置
+
+1. 在 Telegram 搜索 **@BotFather**，创建 Bot 获取 Token
+2. 搜索你的 Bot，发一条消息
+3. 访问 `https://api.telegram.org/bot<Token>/getUpdates` 获取 Chat ID
+4. 在 AutoBangumi 通知设置中添加 Telegram，填入 Token 和 Chat ID
+
+### Discord 配置
+
+1. 在 Discord 频道设置 → 整合 → Webhook，创建 Webhook
+2. 复制 Webhook URL
+3. 在 AutoBangumi 通知设置中添加 Discord，填入 Webhook URL
+
+### Server Chan 配置
+
+1. 在 [Server酱](https://sct.ftqq.com/) 注册并创建 Key
+2. 在 AutoBangumi 通知设置中添加 Server Chan，填入 SendKey
+
 ---
-
-## ⚙️ 支持的下载器
-
-- **qBittorrent**（WebUI）
-
----
-
 ## 🧪 更新日志
 
 详见 [CHANGELOG.md](CHANGELOG.md)
@@ -317,4 +337,3 @@ Notification test successful!
   <a href="https://github.com/AMYdd00/Auto_Bangumi/issues">提交 Issue</a> ·
   <a href="https://github.com/AMYdd00/Auto_Bangumi/pulls">提交 PR</a>
 </p>
-
