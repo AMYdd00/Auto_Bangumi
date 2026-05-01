@@ -3,7 +3,7 @@
  * Note: These tests focus on testable aspects of the hook's behavior
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 // Simplified useApi implementation for testing
 interface Options<T = unknown> {
@@ -14,7 +14,7 @@ interface Options<T = unknown> {
   onFinally?: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 type AnyAsyncFunction = (...args: any[]) => Promise<any>;
 
 function createUseApi<TApi extends AnyAsyncFunction>(
