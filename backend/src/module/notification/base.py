@@ -44,8 +44,13 @@ class NotificationProvider(RequestContent, ABC):
         Returns:
             Formatted message string.
         """
+        import os
+        # If official_title contains a path separator, extract just the folder name
+        title = notify.official_title
+        if os.sep in title or (os.altsep and os.altsep in title):
+            title = os.path.basename(os.path.normpath(title))
         return (
-            f"番剧名称：{notify.official_title}\n"
+            f"番剧名称：{title}\n"
             f"季度： 第{notify.season}季\n"
             f"更新集数： 第{notify.episode}集"
         )

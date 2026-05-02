@@ -48,9 +48,15 @@ class NotificationManager:
 
         def _get_poster_sync():
             with Database() as db:
+                # Try exact match first
                 data = db.bangumi.search_official_title(notification.official_title)
                 if data:
                     notification.poster_path = data.poster_link
+                    return
+                # Fall back to fuzzy match (match_poster uses instr)
+                poster_link = db.bangumi.match_poster(notification.official_title)
+                if poster_link:
+                    notification.poster_path = poster_link
 
         await asyncio.to_thread(_get_poster_sync)
 
