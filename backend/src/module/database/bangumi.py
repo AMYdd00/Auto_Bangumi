@@ -404,6 +404,13 @@ class BangumiDatabase:
 
     def match_poster(self, bangumi_name: str) -> str:
         statement = select(Bangumi).where(
+            func.instr(Bangumi.official_title, bangumi_name) > 0
+        )
+        data = self.session.execute(statement).scalar_one_or_none()
+        if data:
+            return data.poster_link
+        # Try reverse match (bangumi_name contains official_title)
+        statement = select(Bangumi).where(
             func.instr(bangumi_name, Bangumi.official_title) > 0
         )
         data = self.session.execute(statement).scalar_one_or_none()
