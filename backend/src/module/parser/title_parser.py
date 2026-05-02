@@ -10,6 +10,8 @@ from module.parser.analyser import (
     tmdb_parser,
     torrent_parser,
 )
+from module.utils import save_image
+from module.utils.request import RequestContent
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +51,21 @@ class TitleParser:
         )
         if tmdb_info:
             logger.debug("TMDB Matched, official title is %s", tmdb_info.title)
-            bangumi.poster_link = tmdb_info.poster_link
+            poster_url = tmdb_info.poster_link
+            if poster_url:
+                try:
+                    async with RequestContent() as req:
+                        img = await req.get_content(poster_url)
+                    suffix = poster_url.split(".")[-1].split("?")[0]
+                    img_path = save_image(img, suffix, bangumi.official_title)
+                    bangumi.poster_link = img_path
+                except Exception as e:
+                    logger.warning(
+                        f"[Poster] Failed to download poster for {bangumi.official_title}: {e}"
+                    )
+                    bangumi.poster_link = poster_url
+            else:
+                bangumi.poster_link = None
         else:
             logger.warning(
                 f"Cannot match {bangumi.official_title} in TMDB. Use raw title instead."
