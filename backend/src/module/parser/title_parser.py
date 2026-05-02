@@ -11,7 +11,7 @@ from module.parser.analyser import (
     torrent_parser,
 )
 from module.utils import save_image
-from module.utils.request import RequestContent
+from module.network.request_contents import RequestContent
 
 logger = logging.getLogger(__name__)
 
