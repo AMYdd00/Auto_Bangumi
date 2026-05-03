@@ -61,7 +61,6 @@ class NotificationProvider(RequestContent, ABC):
                 bangumi_parts.append(part)
             title = os.sep.join(bangumi_parts) if bangumi_parts else parts[-1]
         return (
-            f"最新一集更新啦\n"
-            f"番剧名称：{title}\n"
+            f"{title} 更新啦\n"
             f"更新集数： 第{notify.episode}集"
         )
