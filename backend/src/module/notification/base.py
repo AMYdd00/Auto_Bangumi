@@ -45,12 +45,23 @@ class NotificationProvider(RequestContent, ABC):
             Formatted message string.
         """
         import os
-        # If official_title contains a path separator, extract just the folder name
+        import re
+        # If official_title contains a full path like "D:\server\QB\Bangumi\", strip it
         title = notify.official_title
         if os.sep in title or (os.altsep and os.altsep in title):
-            title = os.path.basename(os.path.normpath(title))
+            # Try to find the bangumi folder name (the folder before "Season X")
+            # Strip drive letter and base paths
+            normalized = os.path.normpath(title)
+            parts = normalized.split(os.sep)
+            # Find the part that looks like a bangumi title (not "Season X")
+            bangumi_parts = []
+            for part in parts:
+                if re.match(r'^Season\s*\d+$', part, re.IGNORECASE):
+                    break
+                bangumi_parts.append(part)
+            title = os.sep.join(bangumi_parts) if bangumi_parts else parts[-1]
         return (
+            f"最新一集更新啦\n"
             f"番剧名称：{title}\n"
-            f"季度： 第{notify.season}季\n"
             f"更新集数： 第{notify.episode}集"
         )
