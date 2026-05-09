@@ -48,18 +48,25 @@ class NotificationProvider(RequestContent, ABC):
         import re
         # If official_title contains a full path like "D:\server\QB\Bangumi\", strip it
         title = notify.official_title
-        if os.sep in title or (os.altsep and os.altsep in title):
-            # Try to find the bangumi folder name (the folder before "Season X")
-            # Strip drive letter and base paths
-            normalized = os.path.normpath(title)
-            parts = normalized.split(os.sep)
+        # Check for both Windows (\) and Unix (/) path separators
+        has_sep = os.sep in title
+        if os.altsep:
+            has_sep = has_sep or os.altsep in title
+        # Also check for Windows backslash explicitly (Docker runs Linux, os.sep="/")
+        if not has_sep and "\\" in title:
+            has_sep = True
+        if has_sep:
+            # Normalize path: convert backslashes to forward slashes first
+            normalized = title.replace("\\", "/")
+            normalized = os.path.normpath(normalized)
+            parts = normalized.split("/")
             # Find the part that looks like a bangumi title (not "Season X")
             bangumi_parts = []
             for part in parts:
                 if re.match(r'^Season\s*\d+$', part, re.IGNORECASE):
                     break
                 bangumi_parts.append(part)
-            title = os.sep.join(bangumi_parts) if bangumi_parts else parts[-1]
+            title = "\\".join(bangumi_parts) if bangumi_parts else parts[-1]
         return (
             f"{title} 更新啦\n"
             f"更新集数： 第{notify.episode}集"
