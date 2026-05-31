@@ -56,17 +56,14 @@ class NotificationProvider(RequestContent, ABC):
         if not has_sep and "\\" in title:
             has_sep = True
         if has_sep:
-            # Normalize path: convert backslashes to forward slashes first
+            # Normalize path: convert backslashes to forward slashes, then split
             normalized = title.replace("\\", "/")
-            normalized = os.path.normpath(normalized)
+            # Remove trailing slash if present
+            normalized = normalized.rstrip("/")
             parts = normalized.split("/")
-            # Find the part that looks like a bangumi title (not "Season X")
-            bangumi_parts = []
-            for part in parts:
-                if re.match(r'^Season\s*\d+$', part, re.IGNORECASE):
-                    break
-                bangumi_parts.append(part)
-            title = "\\".join(bangumi_parts) if bangumi_parts else parts[-1]
+            # Filter out path components: empty strings, drive letters (e.g. "D:"), and "Season X"
+            anime_parts = [p for p in parts if p and ':' not in p and not re.match(r'^Season\s*\d+$', p, re.IGNORECASE)]
+            title = anime_parts[-1] if anime_parts else parts[-1]
         return (
             f"{title} 更新啦\n"
             f"更新集数： 第{notify.episode}集"
